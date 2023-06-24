@@ -84,3 +84,25 @@ img {
 .remove-planet:hover {
   background-color: black;
 }
+
+.planetDetail {
+  width: 90%;
+  margin: 1.1em auto;
+  background-color: black;
+  color: white;
+  border: 1px solid #ddd;
+  border-radius: 50px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+}
+
+.planetDetail p, .planetDetail h2{
+  
+  color: white;
+  
+}
+
+.planetDetail img {
+  width: 250px;
+}
