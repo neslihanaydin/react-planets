@@ -74,7 +74,7 @@ const planets = [
 const Planet = (props) => {
 
   return (
-    <div className="card">
+    <div className="card" onClick={() => props.onClick(props.id)}>
        <div>
           <img src={props.url} alt={props.name} />
         </div>
@@ -91,6 +91,24 @@ const Planet = (props) => {
 
 }
 
+// 1.5: Create an 'Detail' component 
+
+const Detail = (props) => {
+  return (
+    <div className="planetDetail">
+      <div>
+          <img src={props.url} alt={props.name} />
+        </div>
+        <h2>{props.name}</h2>
+        <p>{props.desc}</p>
+        <h3>Planet Profile</h3>
+        <ul>
+          <li><strong>Diameter:</strong>{props.diameter}</li>
+        </ul>
+    </div>
+  );
+}
+
 
 // 2: Create a container component that iterates over the planets array 
 //    and renders a 'Planet' component for each object in the array 
@@ -98,20 +116,41 @@ const Planet = (props) => {
 class App extends React.Component {
 
   state = {
-    planets : planets
+    planets : planets,
+    activePlanet : planets[0].id
   };
+
+  setActivePlanet = (planetId) => {
+    this.setState({ activePlanet: planetId });
+  };
+
 
   handleRemovePlanet = (id) => {
     this.setState (prevState => {
+      const updatedPlanets = prevState.planets.filter(p => p.id !== id);
+      const activePlanetId = updatedPlanets.length > 0 ? updatedPlanets[0].id : null;
       return {
-        planets: prevState.planets.filter(p => p.id !== id)
+        planets: updatedPlanets,
+        activePlanet: activePlanetId
       };
     });
   }
 
   render() {
+    const activePlanet = this.state.planets.find(
+      (planet) => planet.id === this.state.activePlanet
+    );
     return (
       <div className="container">
+        {activePlanet && (
+          <Detail
+            id={activePlanet.id}
+            name={activePlanet.name}
+            diameter={activePlanet.diameter}
+            desc={activePlanet.desc}
+            url={activePlanet.url}
+          />
+        )}
         {this.state.planets.map( planet =>
           <Planet
             id={planet.id}
@@ -122,8 +161,10 @@ class App extends React.Component {
             desc={planet.desc}
             url={planet.url}
             removePlanet={this.handleRemovePlanet}
+            onClick={() => this.setActivePlanet(planet.id)}
           />
         )}
+        
       </div>
     );
   }
